@@ -20,7 +20,7 @@ ENV VIRTUAL_HOST=douhaoquan.com
 
 
 # 复制构建结果到 Nginx 的静态文件目录
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/build /usr/share/nginx/html
 
 # 复制 Nginx 配置文件
 COPY ./nginx.conf /etc/nginx/nginx.conf
