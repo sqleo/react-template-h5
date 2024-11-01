@@ -1,0 +1,52 @@
+name: 更新 SSL 证书
+
+on:
+  schedule:
+    - cron: '0 0 1 * *' # 每月1号执行一次
+  push:
+    tags:
+      - 'ssl*' # 手动触发
+
+# export CF_Token="2r-xxx"
+# export CF_Account_ID="xxx"
+# export CF_Email="sqliuen@gmail.com"
+# export ACCOUNT_EMAIL="sqliuen@gmail.com"
+
+env:
+  ACME: /home/runner/.acme.sh/acme.sh
+  ACMEDNSAPI: ${{ secrets.ACMEDNSAPI }}
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+  SSH_HOST: ${{ secrets.SSH_HOST }}
+jobs:
+  update-certificates:
+    runs-on: ubuntu-latest
+    # if: github.event.repository.owner.id == github.event.sender.id 
+    steps:
+      - name: 检出存储库
+        uses: actions/checkout@v3
+
+      - name: 安装和配置ACME.SH
+        run: |
+          curl  https://get.acme.sh | sh  -s email=sqliuen@gmail.com
+          sudo echo "$ACMEDNSAPI" >> /home/runner/.acme.sh/account.conf
+          sudo cat ~/.acme.sh/account.conf
+          ls -la ~/.acme.sh
+
+      - name: 颁发和部署证书
+        run: |
+          mkdir -p ./ssl
+          $ACME --issue --dns dns_cf -d admin.uuvvuu.com -d www.admin.uuvvuu.com
+          $ACME --installcert -d admin.uuvvuu.com --key-file ./ssl/admin.uuvvuu.com.key --fullchain-file ./ssl/admin.uuvvuu.com.cer
+          zip -r ssl.zip ssl
+      - name: 创建 known_hosts 文件 并上传
+        run: |
+          mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
+          ssh-keyscan $SSH_HOST >> ~/.ssh/known_hosts
+          sudo cat ~/.ssh/known_hosts
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh -i ~/.ssh/id_rsa $SSH_USERNAME@$SSH_HOST "mkdir -p /home/letsencrypt/ssl"
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ssl.zip $SSH_USERNAME@$SSH_HOST:/home/letsencrypt/ssl/
+          ssh -i ~/.ssh/id_rsa $SSH_USERNAME@$SSH_HOST "unzip -jo /home/letsencrypt/ssl/ssl.zip -d /etc/letsencrypt/live/admin.uuvvuu.com/"
