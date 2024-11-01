@@ -4,9 +4,9 @@ on:
     tags:
       - 'v*'
 # DOCKER 环境变量
-env:
-  DOCKER_USERNAME: sqliuen@163.com
-  DOCKER_PASSWORD: liu123...
+# env:
+#   DOCKER_USERNAME: sqliuen@163.com
+#   DOCKER_PASSWORD: liu123...
 
 jobs:
   deploy:
