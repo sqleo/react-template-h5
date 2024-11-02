@@ -12,8 +12,8 @@ export const useWeappLauncher = () => {
 
         if (isWeixin) {
             (window as any).wx.config({
-                appId: '小程序 AppID',
-                timestamp: 0,
+                appId: 'wxdb00352ada513a93',
+                timestamp: 1000,
                 nonceStr: 'nonceStr',
                 signature: 'signature',
                 jsApiList: ['chooseImage'],
