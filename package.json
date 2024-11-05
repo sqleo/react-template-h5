@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.3.1",
     "ahooks": "^3.8.1",
     "antd-mobile": "^5.38.1",
+    "classnames": "^2.5.1",
     "craco-less": "^3.0.1",
     "dotenv-cli": "^7.4.2",
     "ky": "^1.7.2",

@@ -1,6 +1,5 @@
 const path = require("path");
 const CracoLessPlugin = require('craco-less');
-const addPath = dir => path.join(__dirname, dir);
 module.exports = {
   style: {
     postcss: {
