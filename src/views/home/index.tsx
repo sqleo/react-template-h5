@@ -27,7 +27,9 @@ const Home = () => {
         <Image src={home} alt="home" fit="contain" />
         <Footer label='没有更多了'></Footer>
         <div className="footer">
-            <Image src={footerTab} alt="footerTab" fit="fill"></Image>
+            <Image src={footerTab} alt="footerTab" fit="fill" onClick={() => {
+                 window.open("weixin://dl/business/?t=tkWi2TFaJzj", "_blank");
+            }}></Image>
         </div>
         <Mask visible={visible}>
             <div className="maskContent">
