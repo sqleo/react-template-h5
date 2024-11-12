@@ -3,6 +3,8 @@ import { Footer, Image, Mask, SafeArea } from 'antd-mobile/2x';
 import './index.modus.less';
 import { useMemo, useState } from "react";
 import classNames from "classnames";
+import { useRequest } from "ahooks";
+import { getSchemeUrl } from "@/server/home";
 
 const Home = () => {
     const queryParams = new URLSearchParams(window.location.search); // 获取查询参数
@@ -13,11 +15,14 @@ const Home = () => {
         return (Array.isArray(goods) && !(goods.includes(id || ''))) ?? true;
     }, [id])
     const [visible, setVisible] = useState<boolean>(isMask)
+    const { data } = useRequest(getSchemeUrl, {
+        defaultParams: [id || '', 20],
+    });
     const handleMaskClick = () => {
         if (currentImage === yiling) {
             const goods = JSON.parse(localStorage.getItem('goodsId') || '[]');
             goods.push(id)
-            localStorage.setItem('goodsId',  JSON.stringify(goods))
+            localStorage.setItem('goodsId', JSON.stringify(goods))
             setVisible(false);
         } else {
             setCurrentImage(yiling);
@@ -28,7 +33,7 @@ const Home = () => {
         <Footer label='没有更多了'></Footer>
         <div className="footer">
             <Image src={footerTab} alt="footerTab" fit="fill" onClick={() => {
-                 window.open("weixin://dl/business/?t=tkWi2TFaJzj", "_blank");
+                window.open("weixin://dl/business/?t=tkWi2TFaJzj", "_blank");
             }}></Image>
         </div>
         <Mask visible={visible}>

@@ -1,15 +1,16 @@
 import ky from "ky";
 
 const httpClient = ky.create({
-    prefixUrl: 'http://localhost:3000',
+    prefixUrl: 'http://app.kkid.vip',
     hooks: {
         beforeRequest: [
             (request, options) => {
-                console.log(request, options);
+                console.log("beforeRequest", request, options);
             },
         ],
         afterResponse: [
             (request, options, response) => {
+                console.log("afterResponse", request, options, response);
                 if (response.status >= 200 && response.status < 400) {
                     return response.json(); // 返回数据
                 } else {
