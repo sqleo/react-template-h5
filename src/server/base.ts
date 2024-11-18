@@ -1,7 +1,7 @@
 import ky from "ky";
 
 const httpClient = ky.create({
-    prefixUrl: 'http://app.kkid.vip',
+    prefixUrl: 'https://app.kkid.vip',
     hooks: {
         beforeRequest: [
             (request, options) => {
